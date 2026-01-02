@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory Form</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <h2>Inventory</h2>
+  <form id="inventoryForm">
+    <input name="item" placeholder="Item Name" required><br>
+    <input name="qty" placeholder="Quantity" required><br>
+    <button type="submit">Submit</button>
+  </form>
+
+<script>
+document.getElementById("inventoryForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+  data.type = "inventory";
+  await fetch("https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+  alert("Saved");
+};
+</script>
+</body>
+</html>
