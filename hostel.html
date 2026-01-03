@@ -1,71 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hostel Entry</title>
-<style>
-body{font-family:Arial;background:#f4f6f9;padding:20px}
-input,button{width:100%;padding:10px;margin:6px 0}
-button{background:#0d6efd;color:white;border:none;border-radius:6px}
-.loader{display:none}
-</style>
+<title>Hostel Employee</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<h3>Hostel Entry</h3>
-
-<input id="hostelName" placeholder="Hostel Name">
-<input id="empId" placeholder="Employee ID">
-<input id="empName" placeholder="Employee Name">
-<input id="department" placeholder="Department">
-<input id="mobile" placeholder="Mobile">
-<input type="file" id="cnic">
-
-<button onclick="submitData()">Submit</button>
-<p class="loader" id="loader">Saving...</p>
+<h2>Hostel Employee Form</h2>
+<input id="ename" placeholder="Employee Name"><br><br>
+<input id="edesig" placeholder="Designation"><br><br>
+<input type="file" id="photo" accept="image/*" capture><br><br>
+<button onclick="save()">Save</button>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec";
-
-function toBase64(f){
- return new Promise(r=>{
-  let fr=new FileReader();
-  fr.onload=()=>r(fr.result.split(",")[1]);
-  fr.readAsDataURL(f);
- });
-}
-
-async function submitData(){
- if(!empId.value||!empName.value){
-  alert("Required fields missing");
-  return;
- }
-
- loader.style.display="block";
-
- let data={
-  action:"hostel",
-  hostelName:hostelName.value,
-  empId:empId.value,
-  empName:empName.value,
-  department:department.value,
-  mobile:mobile.value,
-  entryBy:localStorage.getItem("entryBy")
- };
-
- if(cnic.files[0]) data.cnicBase64=await toBase64(cnic.files[0]);
-
- fetch(API,{method:"POST",body:JSON.stringify(data)})
- .then(r=>r.json())
- .then(d=>{
-   loader.style.display="none";
-   alert(d.message);
- })
- .catch(()=>{
-   loader.style.display="none";
-   alert("Server Error");
- });
+const SCRIPT_URL="PASTE_APPS_SCRIPT_URL";
+function save(){
+  let r=new FileReader();
+  r.onload=()=>fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({
+      action:'hostel',
+      user:localStorage.getItem("user"),
+      name:ename.value,
+      desig:edesig.value,
+      img:r.result
+    })
+  }).then(()=>alert("Saved"));
+  r.readAsDataURL(photo.files[0]);
 }
 </script>
-
 </body>
 </html>
