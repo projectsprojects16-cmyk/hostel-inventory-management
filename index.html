@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login | Hostel App</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{font-family:Arial;background:#f4f6f9;display:flex;justify-content:center;align-items:center;height:100vh}
-.card{background:#fff;padding:25px;border-radius:10px;width:300px;box-shadow:0 5px 15px rgba(0,0,0,.2)}
-button{background:#0d6efd;color:#fff;border:none;padding:10px;width:100%;border-radius:6px}
-input{width:100%;padding:8px;margin:8px 0}
-</style>
+  <title>Login | Hostel Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body{font-family:Arial;background:#f2f2f2}
+    .box{max-width:350px;margin:100px auto;padding:20px;background:#fff;border-radius:8px}
+    input,button{width:100%;padding:10px;margin-top:10px}
+    button{background:#007bff;color:#fff;border:none}
+  </style>
 </head>
 <body>
 
-<div class="card">
-<h3>Login</h3>
-<input id="name" placeholder="Your Name">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
+<div class="box">
+  <h2>Admin Login</h2>
+  <input id="name" placeholder="Name">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="msg"></p>
 </div>
 
 <script>
+const SCRIPT_URL="PASTE_APPS_SCRIPT_URL";
+
 function login(){
-  if(!name.value||!pass.value){
-    alert("All fields required");
-    return;
-  }
-  localStorage.setItem("entryBy", name.value);
-  location.href="admin.html";
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({
+      action:'login',
+      name:name.value,
+      pass:pass.value
+    })
+  }).then(r=>r.json()).then(d=>{
+    if(d.success){
+      localStorage.setItem("user",name.value);
+      location.href="admin.html";
+    }else msg.innerText="Invalid Login";
+  });
 }
 </script>
 </body>
