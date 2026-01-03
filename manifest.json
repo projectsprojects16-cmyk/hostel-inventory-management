@@ -1,8 +1,8 @@
 {
- "name":"Hostel Management",
- "short_name":"HostelApp",
- "start_url":"index.html",
- "display":"standalone",
- "theme_color":"#0d6efd",
- "background_color":"#ffffff"
+  "name": "Hostel Inventory",
+  "short_name": "HostelApp",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007bff"
 }
