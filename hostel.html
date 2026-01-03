@@ -1,83 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hostel Entry</title>
+<title>Hostel Entry</title>
+<style>
+body{font-family:Arial;background:#f4f6f9;padding:20px}
+input,button{width:100%;padding:10px;margin:6px 0}
+button{background:#0d6efd;color:white;border:none;border-radius:6px}
+.loader{display:none}
+</style>
 </head>
 <body>
 
-<h2>Hostel Employee Form</h2>
+<h3>Hostel Entry</h3>
 
-<form id="hostelForm">
+<input id="hostelName" placeholder="Hostel Name">
+<input id="empId" placeholder="Employee ID">
+<input id="empName" placeholder="Employee Name">
+<input id="department" placeholder="Department">
+<input id="mobile" placeholder="Mobile">
+<input type="file" id="cnic">
 
-<input id="hostelName" placeholder="Hostel Name"><br><br>
-<input id="empId" placeholder="Employee ID"><br><br>
-<input id="empName" placeholder="Employee Name"><br><br>
-<input id="department" placeholder="Department"><br><br>
-<input id="subDepartment" placeholder="Sub Department"><br><br>
-<input id="mobile" placeholder="Mobile"><br><br>
-<input id="address" placeholder="Address"><br><br>
-
-<label>Join Date</label><br>
-<input type="date" id="joinDate"><br><br>
-
-<label>Leave Date</label><br>
-<input type="date" id="leaveDate"><br><br>
-
-<label>CNIC Image</label><br>
-<input type="file" id="cnicPic" accept="image/*"><br><br>
-
-<label>Employee Card</label><br>
-<input type="file" id="empCardPic" accept="image/*"><br><br>
-
-<button type="button" onclick="submitHostel()">Submit</button>
-
-</form>
+<button onclick="submitData()">Submit</button>
+<p class="loader" id="loader">Saving...</p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec";
+const API="https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec";
 
-function toBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(",")[1]);
-    reader.readAsDataURL(file);
-  });
+function toBase64(f){
+ return new Promise(r=>{
+  let fr=new FileReader();
+  fr.onload=()=>r(fr.result.split(",")[1]);
+  fr.readAsDataURL(f);
+ });
 }
 
-async function submitHostel() {
+async function submitData(){
+ if(!empId.value||!empName.value){
+  alert("Required fields missing");
+  return;
+ }
 
-  const data = {
-    action: "hostel",
-    hostelName: hostelName.value,
-    empId: empId.value,
-    empName: empName.value,
-    department: department.value,
-    subDepartment: subDepartment.value,
-    mobile: mobile.value,
-    address: address.value,
-    joinDate: joinDate.value,
-    leaveDate: leaveDate.value,
-    entryBy: localStorage.getItem("entryBy")
-  };
+ loader.style.display="block";
 
-  if (cnicPic.files[0]) {
-    data.cnicBase64 = await toBase64(cnicPic.files[0]);
-  }
+ let data={
+  action:"hostel",
+  hostelName:hostelName.value,
+  empId:empId.value,
+  empName:empName.value,
+  department:department.value,
+  mobile:mobile.value,
+  entryBy:localStorage.getItem("entryBy")
+ };
 
-  if (empCardPic.files[0]) {
-    data.cardBase64 = await toBase64(empCardPic.files[0]);
-  }
+ if(cnic.files[0]) data.cnicBase64=await toBase64(cnic.files[0]);
 
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    alert(res.message);
-    hostelForm.reset();
-  })
-  .catch(() => alert("Error"));
+ fetch(API,{method:"POST",body:JSON.stringify(data)})
+ .then(r=>r.json())
+ .then(d=>{
+   loader.style.display="none";
+   alert(d.message);
+ })
+ .catch(()=>{
+   loader.style.display="none";
+   alert("Server Error");
+ });
 }
 </script>
 
