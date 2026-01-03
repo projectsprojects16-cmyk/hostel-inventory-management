@@ -2,31 +2,32 @@
 <html>
 <head>
 <title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{font-family:Arial;background:#eef2f7;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;margin-bottom:15px}
-button{padding:10px;border:none;border-radius:6px;background:#0d6efd;color:white}
+body{font-family:Arial;background:#eef}
+.card{background:#fff;padding:20px;margin:20px;border-radius:8px}
+a{display:block;padding:10px;background:#007bff;color:#fff;margin-top:10px;text-decoration:none}
 </style>
 </head>
 <body>
 
-<h2>Admin Dashboard</h2>
-
 <div class="card">
-<button onclick="go('hostel.html')">➕ New Hostel Entry</button>
-</div>
-
-<div class="card">
-<button onclick="go('inventory.html')">➕ New Inventory Entry</button>
-</div>
-
-<div class="card">
-<button onclick="alert('Coming Soon: Edit Records')">✏️ Edit / Update Records</button>
+<h2>Dashboard</h2>
+<p>User: <span id="u"></span></p>
+<a href="hostel.html">Hostel Employee Entry</a>
+<a href="inventory.html">Inventory Entry</a>
+<a href="export-hostel.html">Export Hostel</a>
+<a href="export-inventory.html">Export Inventory</a>
+<button onclick="logout()">Logout</button>
 </div>
 
 <script>
-function go(p){location.href=p;}
+if(!localStorage.getItem("user")) location.href="index.html";
+u.innerText=localStorage.getItem("user");
+function logout(){
+  localStorage.clear();
+  location.href="index.html";
+}
 </script>
-
 </body>
 </html>
