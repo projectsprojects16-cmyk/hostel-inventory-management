@@ -1,26 +1,13 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-<title>Inventory Export</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{font-family:Arial;background:#f4f6f8;padding:20px}
-.card{background:#fff;padding:20px;border-radius:12px;max-width:500px;margin:auto;box-shadow:0 10px 25px rgba(0,0,0,.1)}
-h2{text-align:center}
-input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc}
-button{background:#059669;color:#fff;border:none;font-size:16px}
-</style>
-</head>
 <body>
-<div class="card">
-<h2>Export Inventory</h2>
-<label>From Date</label>
-<input type="date">
-<label>To Date</label>
-<input type="date">
-<button>Export CSV</button>
-<button>Export PDF</button>
-</div>
+<h3>Export Inventory</h3>
+<button onclick="go()">Download CSV</button>
+<script>
+const SCRIPT_URL="PASTE_APPS_SCRIPT_URL";
+function go(){
+  window.open(SCRIPT_URL+"?export=inventory");
+}
+</script>
 </body>
 </html>
