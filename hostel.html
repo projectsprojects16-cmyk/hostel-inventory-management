@@ -1,28 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hostel Employee Form</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <title>Hostel Entry</title>
 </head>
 <body>
-  <h2>Hostel Employee</h2>
-  <form id="hostelForm">
-    <input name="empId" placeholder="Employee ID" required><br>
-    <input name="name" placeholder="Name" required><br>
-    <button type="submit">Submit</button>
-  </form>
+
+<h2>Hostel Employee Form</h2>
+
+<form id="hostelForm">
+
+<input id="hostelName" placeholder="Hostel Name"><br><br>
+<input id="empId" placeholder="Employee ID"><br><br>
+<input id="empName" placeholder="Employee Name"><br><br>
+<input id="department" placeholder="Department"><br><br>
+<input id="subDepartment" placeholder="Sub Department"><br><br>
+<input id="mobile" placeholder="Mobile"><br><br>
+<input id="address" placeholder="Address"><br><br>
+
+<label>Join Date</label><br>
+<input type="date" id="joinDate"><br><br>
+
+<label>Leave Date</label><br>
+<input type="date" id="leaveDate"><br><br>
+
+<label>CNIC Image</label><br>
+<input type="file" id="cnicPic" accept="image/*"><br><br>
+
+<label>Employee Card</label><br>
+<input type="file" id="empCardPic" accept="image/*"><br><br>
+
+<button type="button" onclick="submitHostel()">Submit</button>
+
+</form>
 
 <script>
-document.getElementById("hostelForm").onsubmit = async (e) => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target));
-  data.type = "hostel";
-  await fetch("https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec", {
+const API_URL = "https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec";
+
+function toBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function submitHostel() {
+
+  const data = {
+    action: "hostel",
+    hostelName: hostelName.value,
+    empId: empId.value,
+    empName: empName.value,
+    department: department.value,
+    subDepartment: subDepartment.value,
+    mobile: mobile.value,
+    address: address.value,
+    joinDate: joinDate.value,
+    leaveDate: leaveDate.value,
+    entryBy: localStorage.getItem("entryBy")
+  };
+
+  if (cnicPic.files[0]) {
+    data.cnicBase64 = await toBase64(cnicPic.files[0]);
+  }
+
+  if (empCardPic.files[0]) {
+    data.cardBase64 = await toBase64(empCardPic.files[0]);
+  }
+
+  fetch(API_URL, {
     method: "POST",
     body: JSON.stringify(data)
-  });
-  alert("Saved");
-};
+  })
+  .then(res => res.json())
+  .then(res => {
+    alert(res.message);
+    hostelForm.reset();
+  })
+  .catch(() => alert("Error"));
+}
 </script>
+
 </body>
 </html>
