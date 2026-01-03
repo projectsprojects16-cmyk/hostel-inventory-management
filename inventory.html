@@ -2,49 +2,32 @@
 <html>
 <head>
 <title>Inventory</title>
-<style>
-body{font-family:Arial;background:#eef2f7;padding:20px}
-input,button{width:100%;padding:10px;margin:6px 0}
-button{background:#198754;color:white;border:none;border-radius:6px}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<h3>Inventory Entry</h3>
-
-<input id="item" placeholder="Item Name">
-<input id="qty" placeholder="Quantity">
-<input type="file" id="video">
-
+<h2>Inventory Form</h2>
+<input id="iname" placeholder="Item Name"><br><br>
+<input id="qty" placeholder="Quantity"><br><br>
+<input type="file" id="video" accept="video/*" capture><br><br>
 <button onclick="save()">Save</button>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbzE7jvsyf3ZiXUspwCtDeSvyCxf_adzMXeVriEyIEeAwWqeowmCIFYEiVdeqgKemEn0/exec";
-
-function toBase64(f){
- return new Promise(r=>{
-  let fr=new FileReader();
-  fr.onload=()=>r(fr.result.split(",")[1]);
-  fr.readAsDataURL(f);
- });
-}
-
-async function save(){
- let data={
-  action:"inventory",
-  itemName:item.value,
-  quantity:qty.value,
-  entryBy:localStorage.getItem("entryBy")
- };
-
- if(video.files[0]) data.videoBase64=await toBase64(video.files[0]);
-
- fetch(API,{method:"POST",body:JSON.stringify(data)})
- .then(r=>r.json())
- .then(d=>alert(d.message))
- .catch(()=>alert("Error"));
+const SCRIPT_URL="PASTE_APPS_SCRIPT_URL";
+function save(){
+  let r=new FileReader();
+  r.onload=()=>fetch(SCRIPT_URL,{
+    method:'POST',
+    body:JSON.stringify({
+      action:'inventory',
+      user:localStorage.getItem("user"),
+      item:iname.value,
+      qty:qty.value,
+      vid:r.result
+    })
+  }).then(()=>alert("Saved"));
+  r.readAsDataURL(video.files[0]);
 }
 </script>
-
 </body>
 </html>
