@@ -1,20 +1,5 @@
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open("hostel-cache").then(cache => {
-      return cache.addAll([
-        "./",
-        "./index.html",
-        "./hostel.html",
-        "./inventory.html"
-      ]);
-    })
-  );
+self.addEventListener("install", e => {
+  self.skipWaiting();
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
+self.addEventListener("fetch", () => {});
